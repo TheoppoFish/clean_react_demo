@@ -1,4 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from "react";
+import {useComments} from "./hooks/useComments.ts";
+import {useCreateComment} from "./hooks/useCreateComment.ts";
+import List from "./components/list.tsx";
 
 type Comment = {
   id: string;
@@ -11,57 +14,25 @@ type Comment = {
 };
 
 const CommentsPage: FC = () => {
-  // State of fetching comments
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // State of adding a comment
-  const commentRef = useRef<HTMLTextAreaElement>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {comments, isLoading, error, setComments} = useComments()
 
-  // Fetch comments
-  useEffect(() => {
-    setIsLoading(true);
-    fetch("/api/comments")
-      .then((res) => res.json())
-      .then((comments) => setComments(comments))
-      .catch(() => setError("SYSTEM_ERROR"))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const  {commentRef, submitError, isSubmitting}=useCreateComment(setComments)
 
-  useEffect(() => {
-    const submitHandler: (event: SubmitEvent) => Promise<() => void> = async (
-      event: SubmitEvent
-    ) => {
-      if (event.type === "Submit" && commentRef.current?.value) {
-        setIsSubmitting(true);
 
-        try {
-          const newComments = await fetch("/api/comments", {
-            method: "POST",
-            body: JSON.stringify(commentRef.current.value),
-          }).then((res) => res.json());
+  if (isSubmitting) {
+    return <div>Loading....</div>
+  }
 
-          setComments(newComments);
-        } catch {
-          setSubmitError("API_ERROR");
-        } finally {
-          setIsSubmitting(false);
-        }
-      }
+  if (submitError) {
+    return <div>error msg </div>
+  }
 
-      // Add event listener
-      window.addEventListener("submit", submitHandler);
+  if (comments.length === 0) {
+    return <div>empty list</div>
+  }
 
-      return () => {
-        window.removeEventListener("submit", submitHandler);
-      };
-    };
-  }, []);
-
-  return <div>{/*your tsx file here*/}</div>;
+  return <div><List/></div>;
 };
 
 export default CommentsPage;
