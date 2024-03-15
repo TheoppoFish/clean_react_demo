@@ -1,32 +1,38 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-function getCommentsApi() {
-    return fetch("/api/comments")
-        .then((res) => res.json());
+import {userComment, userCommentDto} from "@/types";
+
+const getCommentsApi: (userId: String) => Promise<userCommentDto[]> = async (userId: String) =>
+    fetch(`/api/comments/user/${userId}`).then(res => res.json())
+
+const getCommentsService = async (userId: string): Promise<userComment[]> => {
+    const result = await getCommentsApi(userId);
+    return result.map(item => {
+        return {
+            id: item.id,
+            content: item.content ?? "No comments for now",
+            createdAt: item.createdAt,
+            createdBy: item.createdBy
+        }
+    })
+
 }
 
-const getCommentsService = () => {
-    // do something
-
-    return getCommentsApi()
-
-}
-
-export const useComments = () => {
+export const useComments = (userId: string) => {
     // State of fetching comments
-    const [comments, setComments] = useState<Comment[]>([]);
+    const [comments, setComments] = useState<userComment[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     // Fetch comments
     useEffect(() => {
         setIsLoading(true);
-        getCommentsService()
+        getCommentsService(userId)
             .then((comments) => setComments(comments))
             .catch(() => setError("SYSTEM_ERROR"))
             .finally(() => setIsLoading(false));
     }, []);
 
-    return {comments, isLoading, error, setComments}
+    return {comments, isLoading, error, onReload: setComments}
 
 };

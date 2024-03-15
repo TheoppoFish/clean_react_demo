@@ -1,8 +1,8 @@
 import React from 'react';
-import {useComments} from "../hooks/useComments.ts";
+import {useComments} from "@/hooks";
 
 const List = () => {
-    const {comments, isLoading, error, setComments} = useComments()
+    const {comments, isLoading, error, onReload} = useComments("test")
 
     if (isLoading) {
         return <div>Loading....</div>

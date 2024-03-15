@@ -1,6 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {RefObject, useEffect, useRef, useState} from 'react';
+import {userComment} from "../types";
 
-export const useCreateComment = (setComments: any) => {
+type useCreateCommentOptions = {
+    onRefresh: (comments: userComment[])=>void
+}
+
+type useCreateCommentValue={
+    commentRef: RefObject<HTMLTextAreaElement>,
+    isSubmitting: boolean,
+    submitError: string | null,
+}
+export const useCreateComment: (options: useCreateCommentOptions)=>useCreateCommentValue = ({onRefresh}) => {
     // State of adding a comment
     const commentRef = useRef<HTMLTextAreaElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +30,7 @@ export const useCreateComment = (setComments: any) => {
                         body: JSON.stringify(commentRef.current.value),
                     }).then((res) => res.json());
 
-                    setComments(newComments);
+                    onRefresh(newComments);
                 } catch {
                     setSubmitError("API_ERROR");
                 } finally {

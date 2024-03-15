@@ -1,11 +1,15 @@
-import React, {FC} from 'react';
-import CommentsPage from "./CommentsPage.tsx";
+import React, {FC, Suspense} from 'react';
+import {BrowserRouter} from "react-router-dom";
+import RenderRouter from "@/router";
 
-const App:FC = () => {
+const App: FC = () => {
     return (
-        <section>
-            <CommentsPage/>
-        </section>
+        <BrowserRouter>
+            <Suspense fallback={<>...</>}>
+                <RenderRouter/>
+            </Suspense>
+        </BrowserRouter>
+
     );
 };
 
