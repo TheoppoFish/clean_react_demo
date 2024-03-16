@@ -14,15 +14,16 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
       "*": [
-        "node_modules/*",
+        "node_modules/*"
       ],
       "@/test/*": ["test/*"],
-      "@/*": ["src/*"],
-    },
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["./src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

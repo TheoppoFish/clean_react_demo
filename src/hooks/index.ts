@@ -1,2 +1,2 @@
-export * from './useComments.ts'
-export * from './useCreateComment.ts'
+export * from './useComments'
+export * from './useCreateComment'

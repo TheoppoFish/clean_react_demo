@@ -16,7 +16,7 @@ const getCommentsService = async (userId: string): Promise<userComment[]> => {
         }
     })
 
-}
+};
 
 export const useComments = (userId: string) => {
     // State of fetching comments
