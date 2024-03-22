@@ -1,6 +1,6 @@
 import {http, HttpResponse} from 'msw'
-import {meetupsResponse} from "@/mocks/responses";
+import {commentsResponse} from "@/mocks/responses/allComments";
 
 export const handlers = [
-    http.get('/api/meetups', (req,) => HttpResponse.json(meetupsResponse))
+    http.get('/api/comments/*', (req,) => HttpResponse.json(commentsResponse))
 ];

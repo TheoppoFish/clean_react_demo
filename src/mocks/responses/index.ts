@@ -1,1 +1,1 @@
-export * from './allMeetups'
+export * from './allComments'

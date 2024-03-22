@@ -15,7 +15,6 @@ const getCommentsService = async (userId: string): Promise<userComment[]> => {
             createdBy: item.createdBy
         }
     })
-
 };
 
 export const useComments = (userId: string) => {

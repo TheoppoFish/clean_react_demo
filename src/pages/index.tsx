@@ -5,8 +5,10 @@ import {userComment} from "@/types";
 
 const Comment: FC<{ comment: userComment }> = ({ comment }) => (
     <div>
-        <h2>{comment.createdBy}</h2>
+        <h2>Comment</h2>
         <p>{comment.content}</p>
+        <img src={comment.source} alt="comment image"/>
+        <h2>{comment.createdBy} created this on</h2>
         <small>{new Date(comment.createdAt).toLocaleString()}</small>
     </div>
 );
